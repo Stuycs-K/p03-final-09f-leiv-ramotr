@@ -26,10 +26,10 @@ int main(int argc, char *argv[] ) {
       buf[strlen(buf)-1]=0;
       printf("%s\n",buf); // put the game function here
     }
-    int client_socket = server_tcp_handshake(listen_socket);
-    printf("client connected\n");
-    pid_t p = fork();
-    if (p==-1)perror("fork failed");
-    else if (p==0)subserver_logic(client_socket);
+    if (FD_ISSET(listen_socket,&descriptors)) {
+      int client_socket = server_tcp_handshake(listen_socket);
+      printf("client connected\n");
+      // do matching stuff
+    }
   }
 }
