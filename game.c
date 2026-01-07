@@ -4,6 +4,10 @@
 #include <string.h>
 //#include "networking.h"
 
+int print_board(){
+
+}
+
 void game_statements(){
   char line[10];
   while(1){
@@ -12,7 +16,7 @@ void game_statements(){
       continue;
     }
     if(line[0] == 'y'){
-      //start_game();
+      //print_board();
       printf("start game\n");
     }
     else if(line[0] == 'n'){
