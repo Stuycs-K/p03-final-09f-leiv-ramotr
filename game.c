@@ -5,7 +5,9 @@
 //#include "networking.h"
 
 int print_board(){
+  char board[5][5];
 
+  return 0
 }
 
 void game_statements(){
@@ -23,7 +25,7 @@ void game_statements(){
       exit(0);
     }
     else{
-      printf("please type only y (for yes) or n (for no) \n Would you like to play? (y/n)");
+      printf("please type only y (for yes) or n (for no) \n");
     }
   }
 }
