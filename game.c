@@ -5,7 +5,9 @@
 //#include "networking.h"
 
 int print_board(){
+  char board[5][5];
 
+  return 0
 }
 
 void game_statements(){
