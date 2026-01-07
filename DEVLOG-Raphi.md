@@ -9,3 +9,6 @@ Spent class deciding which project to attempt and filling out the proposal docum
 
 ### 2026-01-06 - Networking with sockets
 Pasted old files for networking and server/client connections. Changed files to work properly and tested across multiple computers.
+
+### 2026-01-07 - Select
+Added select in the server file to read from listening_socket and stdin. It will read a buffer from stdin and send to a function that handles the game. It will add any new clients to a list where they get matched.
