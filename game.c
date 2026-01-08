@@ -36,45 +36,55 @@ void game_statements(){
       print_board(board);
 
 ///game features
-      char turn[10];
-      printf("Your Turn --> ");
-      if(fgets(turn, 10, stdin) == NULL){
-        continue;
+    int player = 0;
+    while(1){
+      char move[10];
+      char piece[10];
+      if(player == 0){
+        piece[0] = 'O';
+        printf("Your Turn --> ");
       }
-      if(strncmp(turn, "TL", 2) == 0){
-        board[0][0] = 'O';
+      else if(player == 1){
+        piece[0] = 'X';
+        printf("Opponent Turn --> ");
       }
-      else if(strncmp(turn, "TM", 2) == 0){
-        board[0][1] = 'O';
+      fgets(move, 10, stdin);
+      if(strncmp(move, "TL", 2) == 0){
+        board[0][0] = piece[0];
       }
-      else if(strncmp(turn, "TR", 2) == 0){
-        board[0][2] = 'O';
+      else if(strncmp(move, "TM", 2) == 0){
+        board[0][1] = piece[0];
       }
-      else if(strncmp(turn, "ML", 2) == 0){
-        board[1][0] = 'O';
+      else if(strncmp(move, "TR", 2) == 0){
+        board[0][2] = piece[0];
       }
-      else if(strncmp(turn, "MM", 2) == 0){
-        board[1][1] = 'O';
+      else if(strncmp(move, "ML", 2) == 0){
+        board[1][0] = piece[0];
       }
-      else if(strncmp(turn, "MR", 2) == 0){
-        board[1][2] = 'O';
+      else if(strncmp(move, "MM", 2) == 0){
+        board[1][1] = piece[0];
       }
-      else if(strncmp(turn, "BL", 2) == 0){
-        board[2][0] = 'O';
+      else if(strncmp(move, "MR", 2) == 0){
+        board[1][2] = piece[0];
       }
-      else if(strncmp(turn, "BM", 2) == 0){
-        board[2][1] = 'O';
+      else if(strncmp(move, "BL", 2) == 0){
+        board[2][0] = piece[0];
       }
-      else if(strncmp(turn, "BR", 2) == 0){
-        board[2][2] = 'O';
+      else if(strncmp(move, "BM", 2) == 0){
+        board[2][1] = piece[0];
+      }
+      else if(strncmp(move, "BR", 2) == 0){
+        board[2][2] = piece[0];
       }
       else{
         printf("Invalid move. \n");
+        continue;
         //need to allow user to move again.
       }
       print_board(board);
+      player = (player + 1) % 2;
       printf("Waiting for opponent...");
-      exit(0);
+      }
     }
     else if(strncmp(line, "n\0", 1) == 0){
       exit(0);
