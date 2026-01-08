@@ -83,7 +83,7 @@ void game_statements(){
       }
       print_board(board);
       player = (player + 1) % 2;
-      printf("Waiting for opponent...");
+      printf("Waiting for opponent...\n");
       }
     }
     else if(strncmp(line, "n\0", 1) == 0){
