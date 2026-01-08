@@ -79,3 +79,7 @@ void err(int i, char*message){
   	exit(1);
   }
 }
+void err() {
+  printf("Error %d: %s\n",errno,strerror(errno));
+  exit(0);
+}
