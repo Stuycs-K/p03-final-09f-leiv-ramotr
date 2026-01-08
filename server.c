@@ -5,9 +5,9 @@ static void sighandler(int signo) {
     exit(0);
   }
 }
-
-void subserver_logic(int client_socket){
-
+static int client[100];
+void matchmaking(int client_socket){
+  
 }
 
 int main(int argc, char *argv[] ) {
@@ -29,7 +29,7 @@ int main(int argc, char *argv[] ) {
     if (FD_ISSET(listen_socket,&descriptors)) {
       int client_socket = server_tcp_handshake(listen_socket);
       printf("client connected\n");
-      // do matching stuff
+      matchmaking(client_socket);
     }
   }
 }
