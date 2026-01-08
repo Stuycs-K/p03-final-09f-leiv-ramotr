@@ -27,16 +27,54 @@ void game_statements(){
     }
   }
   while(1){
-    printf("Would you like to play? (y/n)\n");
+    printf("Would you like to play? (y/n) --> ");
     if(fgets(line, 10, stdin) == NULL){
       continue;
     }
-    if(line[0] == 'y'){
-      printf("start game\n");
+    if(strncmp(line, "y", 1)==0){
+      printf("Game Starting...\n");
       print_board(board);
+///game features
+      char turn[10];
+      printf("Your Turn --> ");
+      if(fgets(turn, 10, stdin) == NULL){
+        continue;
+      }
+      if(strncmp(turn, "TL", 2) == 0){
+        board[0][0] = 'O';
+      }
+      else if(strncmp(turn, "TM", 2) == 0){
+        board[0][1] = 'O';
+      }
+      else if(strncmp(turn, "TR", 2) == 0){
+        board[0][2] = 'O';
+      }
+      else if(strncmp(turn, "ML", 2) == 0){
+        board[1][0] = 'O';
+      }
+      else if(strncmp(turn, "MM", 2) == 0){
+        board[1][1] = 'O';
+      }
+      else if(strncmp(turn, "MR", 2) == 0){
+        board[1][2] = 'O';
+      }
+      else if(strncmp(turn, "BL", 2) == 0){
+        board[2][0] = 'O';
+      }
+      else if(strncmp(turn, "BM", 2) == 0){
+        board[2][1] = 'O';
+      }
+      else if(strncmp(turn, "BR", 2) == 0){
+        board[2][2] = 'O';
+      }
+      else{
+        printf("Invalid move. \n");
+      }
+      print_board(board);
+      printf("Waiting for opponent...");
       exit(0);
     }
-    else if(line[0] == 'n'){
+    else if(strncmp(line, "n\0", 1) == 0){
       exit(0);
     }
     else{
