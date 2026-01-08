@@ -12,4 +12,5 @@ Worked on beginning print statements and game board; an error we have is the inp
 Finished README and printed gameboard.
 Goes through input from user. Ex. types BR and board is reprinted with bottom right changed. Took approx. an hour
 
-### 2026-01-08 - 
+### 2026-01-08 - Worked on game mechanics
+Fixed notation so that it switches players (could only be played locally for now). Repeats.
