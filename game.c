@@ -23,7 +23,7 @@ void game_statements(){
   char board[3][3];
   for(int i = 0; i<3; i++){
     for(int j = 0; j<3; j++){
-      board[i][j] = 'X';
+      board[i][j] = ' ';
     }
   }
   while(1){
@@ -34,6 +34,7 @@ void game_statements(){
     if(strncmp(line, "y", 1)==0){
       printf("Game Starting...\n");
       print_board(board);
+
 ///game features
       char turn[10];
       printf("Your Turn --> ");
@@ -69,6 +70,7 @@ void game_statements(){
       }
       else{
         printf("Invalid move. \n");
+        //need to allow user to move again.
       }
       print_board(board);
       printf("Waiting for opponent...");
