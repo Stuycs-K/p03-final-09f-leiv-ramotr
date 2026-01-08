@@ -20,9 +20,8 @@ We want to create a Tic Tac Toe Game where you have the option to play with peop
 # Technical Details:
 
  - Sockets to connect severs to random clients.
- - Shared memory to store game board, progress, and win-loss create
- - Semaphores to block shared memory
- - processes: fork to make each of the game's own server
+ - Stores game board locally and win-loss rate.
+ - use select to listen for new sockets and get user input
  - Working with files to save local memory of that game in the two player option
  - ncurses if have time to make a chat
  - Finding a new opponent: saves PID of client already played with before and if matched again, it will leave the game and search for a different player and it will send the opponent a message that "you displayed horrible sportsmanship".
