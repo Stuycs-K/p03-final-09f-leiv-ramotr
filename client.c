@@ -38,33 +38,28 @@ void onlineplay() {
   }
   int server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
-  char board[3][3] = malloc(9);
-  for(int i = 0; i<3; i++){
-    for(int j = 0; j<3; j++){
-      board[i][j] = ' ';
-    }
-  }
+  reset_board();
   printf("Waiting to be matched....\n");
-  char player;
-  int bytes = recv(server_socket,player,sizeof(player),0);
+  int player;
+  int bytes = recv(server_socket,&player,sizeof(int),0);
   if (bytes==0) err();
-  char initialPlayer = player;
+  int initialPlayer = player;
   while(1)  {     // change to function that assesses condition of game board
     char move[100];
     if (player) {
       bytes = recv(server_socket,move,sizeof(move),0);
       if (bytes==0)err();
-      updateboard(move,initialPlayer,board);
-      printboard(board);
+      update_board(move,initialPlayer);
+      print_board();
     }
     else {
       while(1) {
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
-        int success = updateboard(move,initialPlayer,board);
+        int success = update_board(move,initialPlayer);
         if (success)break;
       }
-      printboard(board);
+      print_board();
     }
     player = (player+1)%2;
   }
