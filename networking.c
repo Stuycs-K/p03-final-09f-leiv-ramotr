@@ -19,7 +19,7 @@ int server_setup() {
   //this code should get around the address in use error
   int yes = 1;
   int sockOpt =  setsockopt(clientd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
-  err(sockOpt,"sockopt  error");
+  error(sockOpt,"sockopt  error");
 
   //bind the socket to address and port
   bind(clientd,results->ai_addr,results->ai_addrlen);
@@ -57,13 +57,13 @@ int client_tcp_handshake(char * server_address) {
   hints->ai_family = AF_INET;
   hints->ai_socktype = SOCK_STREAM;
   //getaddrinfo
-  err(getaddrinfo(server_address,PORT,hints,&results),"getting address info");
+  error(getaddrinfo(server_address,PORT,hints,&results),"getting address info");
   int serverd;//store the socket descriptor here
   //create the socket
   serverd = socket(results->ai_family, results->ai_socktype, results->ai_protocol);
-  err(serverd,"creating socket");
+  error(serverd,"creating socket");
   //connect() to the server
-  err(connect(serverd, results->ai_addr, results->ai_addrlen),"connecting");
+  error(connect(serverd, results->ai_addr, results->ai_addrlen),"connecting");
   free(hints);
   freeaddrinfo(results);
 
@@ -73,7 +73,7 @@ int client_tcp_handshake(char * server_address) {
 
 
 
-void err(int i, char*message){
+void error(int i, char*message){
   if(i < 0){
 	  printf("Error: %s - %s\n",message, strerror(errno));
   	exit(1);
