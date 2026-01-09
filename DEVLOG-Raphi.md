@@ -15,4 +15,7 @@ Added select in the server file to read from listening_socket and stdin. It will
 
 ### 2026-01-08 - Client Logic
 Set up matchmaking function in server and did most of client logic to have a game with another client.
-At home: Reworked client logic. Changed functions in game to just change the status of the board. In the client file, you are asked whether you want to play locally or online. The online version will receive a player number from the server which will determine if you are X's or O's. Then it takes turns waiting for moves from the server or receiving moves from a user. 
+At home: Reworked client logic. Changed functions in game to just change the status of the board. In the client file, you are asked whether you want to play locally or online. The online version will receive a player number from the server which will determine if you are X's or O's. Then it takes turns waiting for moves from the server or receiving moves from a user.
+
+### 2026-01-09 - Game Logic w/ local play
+Created local play to test the game. Made a way to return to main menu. Added clearer instructions. Next will work on matchmaking so online play works and will add ability to get help info from anywhere in game.
