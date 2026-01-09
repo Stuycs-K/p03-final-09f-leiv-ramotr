@@ -54,20 +54,22 @@ void onlineplay() {
     if (player) {
       bytes = recv(server_socket,move,sizeof(move),0);
       if (bytes==0)err();
-      updateboard(move,initialPlayer);
+      updateboard(move,initialPlayer,board);
+      printboard(board);
     }
     else {
       while(1) {
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
-        int success = updateboard(move,initialPlayer);
+        int success = updateboard(move,initialPlayer,board);
         if (success)break;
       }
+      printboard(board);
     }
     player = (player+1)%2;
   }
 }
 
 void localplay() {
-  
+
 }
