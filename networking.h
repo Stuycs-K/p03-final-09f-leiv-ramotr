@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <stdbool.h>
 
 
 #ifndef NETWORKING_H
@@ -26,5 +27,6 @@ void print_board();
 void onlineplay();
 void localplay();
 void reset_board();
+int check_board();
 extern char board[3][3];
 #endif
