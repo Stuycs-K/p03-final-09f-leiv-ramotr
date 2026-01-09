@@ -44,9 +44,9 @@ void onlineplay() {
   int bytes = recv(server_socket,&player,sizeof(int),0);
   if (bytes==0) err();
   int initialPlayer = player;
-  while(1)  {     // change to function that assesses condition of game board
+  while(check_board()==0)  {
     char move[2];
-    if (player) {
+    if (player==2) {
       printf("Waiting for opponent to move...\n");
       bytes = recv(server_socket,move,sizeof(move),0);
       if (bytes==0)err();
@@ -64,7 +64,17 @@ void onlineplay() {
       print_board();
       send(server_socket,move,sizeof(move),0);
     }
-    player = (player+1)%2;
+    player = player%2+1;
+  }
+  int result = check_board();
+  if ((result==1 && player==1) || (result==2 && player==2)) {
+    printf("You win!\n");
+  }
+  else if ((result==1 && player==2) || (result==2 && player==1)) {
+    printf("You lose... better luck next time.\n");
+  }
+  else if (result==3) {
+    printf("Draw. What an intense match.\n");
   }
 }
 
