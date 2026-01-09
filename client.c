@@ -44,13 +44,13 @@ void onlineplay() {
   int bytes = recv(server_socket,&player,sizeof(int),0);
   if (bytes==0) err();
   int initialPlayer = player;
-  while(check_board()==0)  {
+  while(check_board()==0) {
     char move[2];
     if (player==2) {
       printf("Waiting for opponent to move...\n");
       bytes = recv(server_socket,move,sizeof(move),0);
       if (bytes==0)err();
-      update_board(move,initialPlayer);
+      update_board(move,initialPlayer%2+1);
       print_board();
     }
     else {
@@ -79,5 +79,27 @@ void onlineplay() {
 }
 
 void localplay() {
-
+  reset_board();
+  int player = 1;
+  while(check_board()==0) {
+    char move[2];
+    print_board();
+    while(1) {
+      char *input = fgets(move,sizeof(move),stdin);
+      if (input==NULL)err();
+      int success = update_board(move,player);
+      if (success)break;
+    }
+    player = player%2+1;
+  }
+  int result = check_board();
+  if (result==1) {
+    printf("X's win!\n");
+  }
+  else if (result==2) {
+    printf("O's win!\n");
+  }
+  else if (result==3) {
+    printf("Draw. What an intense match.\n");
+  }
 }
