@@ -44,24 +44,30 @@ void onlineplay() {
       board[i][j] = ' ';
     }
   }
+  printf("Waiting to be matched....\n");
   char player;
   int bytes = recv(server_socket,player,sizeof(player),0);
   if (bytes==0) err();
-  while(1) {
+  char initialPlayer = player;
+  while(1)  {     // change to function that assesses condition of game board
     char move[100];
     if (player) {
       bytes = recv(server_socket,move,sizeof(move),0);
       if (bytes==0)err();
-      updateboard(move,player);
+      updateboard(move,initialPlayer);
     }
     else {
       while(1) {
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
-        int success = updateboard(move,player);
+        int success = updateboard(move,initialPlayer);
         if (success)break;
       }
     }
     player = (player+1)%2;
   }
+}
+
+void localplay() {
+  
 }
