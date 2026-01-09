@@ -31,6 +31,20 @@ void clientLogic(int server_socket){
 }
 
 int main(int argc, char *argv[] ) {
+  printf("Enter 1 to play locally. Enter 2 to play against a random opponent.\n");
+  char mode[10];
+  while(1) {
+    char *in = fgets(mode,sizeof(mode),stdin);
+    if (in==NULL)err();
+    if (strcmp(mode,"1")==0 || strcmp(mode,"2"))break;
+  }
+  
+  char board[3][3];
+  for(int i = 0; i<3; i++){
+    for(int j = 0; j<3; j++){
+      board[i][j] = ' ';
+    }
+  }
   signal(SIGINT,sighandler);
   char* IP = "127.0.0.1";
   if(argc>1){
