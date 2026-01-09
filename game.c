@@ -1,6 +1,7 @@
 #include "networking.h"
+char board[3][3];
 
-void print_board(char board[][]){
+void print_board(){
   printf("     |     |     \n");
   printf("  %c  |  %c  |  %c  \n", board[0][0], board[0][1], board[0][2]);
   printf("_____|_____|_____\n");
@@ -12,7 +13,15 @@ void print_board(char board[][]){
   printf("     |     |     \n\n");
 }
 
-int updateboard(char *move, int player, char board[][]){
+void reset_board() {
+  for(int i = 0; i<3; i++){
+    for(int j = 0; j<3; j++){
+      board[i][j] = ' ';
+    }
+  }
+}
+
+int update_board(char *move, int player){
   char piece;
   if(player == 0){
     piece = 'X';
