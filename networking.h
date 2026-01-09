@@ -28,5 +28,7 @@ void onlineplay();
 void localplay();
 void reset_board();
 int check_board();
+void begin_play();
+void print_help();
 extern char board[3][3];
 #endif

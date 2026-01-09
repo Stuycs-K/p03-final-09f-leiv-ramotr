@@ -14,6 +14,10 @@ void print_board(){
   printf("     |     |     \n\n");
 }
 
+void print_help() {
+  
+}
+
 void reset_board() {
   // set board to spaces
   for(int i = 0; i<3; i++){
