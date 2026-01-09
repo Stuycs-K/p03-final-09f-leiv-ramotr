@@ -16,11 +16,15 @@
 #define NETWORKING_H
 #define PORT "19230"
 #define BUFFER_SIZE 1024
-void err(int i, char*message);
+void error(int i, char*message);
 void err();
 int server_setup();
 int client_tcp_handshake(char*server_address);
 int server_tcp_handshake(int listen_socket);
-int updateboard(char *move, int player, char board[][]);
-void printboard(char board[][]);
+int update_board(char *move, int player);
+void print_board();
+void onlineplay();
+void localplay();
+void reset_board();
+extern char board[3][3];
 #endif
