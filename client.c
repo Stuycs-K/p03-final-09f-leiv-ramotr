@@ -7,7 +7,43 @@ static void sighandler(int signo) {
   }
 }
 
-void clientLogic(int server_socket){
+int main(int argc, char *argv[] ) {
+  signal(SIGINT,sighandler);
+  printf("Enter 1 to play locally. Enter 2 to play against a random opponent.\n");
+  char mode[10];
+  while(1) {
+    char *in = fgets(mode,sizeof(mode),stdin);
+    if (in==NULL)err();
+    if (strcmp(mode,"1")==0 || strcmp(mode,"2"))break;
+    else {
+      printf("Please only type 1 or 2.\n");
+    }
+  }
+  if (strcmp(mode,"1")==0) {
+    onlineplay();
+  }
+  else {
+    localplay();
+  }
+}
+
+void onlineplay() {
+  char* IP = "127.0.0.1";
+  printf("Enter the IP Address of the server (Press enter if server is local)\n");
+  char newIP[20];
+  char *input = fgets(newIP,sizeof(newIP),stdin);
+  newIP[strlen(newIP)-1] = 0;
+  if(strlen(newIP)!=0){
+    IP=newIP;
+  }
+  int server_socket = client_tcp_handshake(IP);
+  printf("Connected to server.\n");
+  char board[3][3] = malloc(9);
+  for(int i = 0; i<3; i++){
+    for(int j = 0; j<3; j++){
+      board[i][j] = ' ';
+    }
+  }
   char player;
   int bytes = recv(server_socket,player,sizeof(player),0);
   if (bytes==0) err();
@@ -20,7 +56,7 @@ void clientLogic(int server_socket){
     }
     else {
       while(1) {
-        char *input = fgets(move,sizeof(move),stdin);
+        input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
         int success = updateboard(move,player);
         if (success)break;
@@ -28,29 +64,4 @@ void clientLogic(int server_socket){
     }
     player = (player+1)%2;
   }
-}
-
-int main(int argc, char *argv[] ) {
-  printf("Enter 1 to play locally. Enter 2 to play against a random opponent.\n");
-  char mode[10];
-  while(1) {
-    char *in = fgets(mode,sizeof(mode),stdin);
-    if (in==NULL)err();
-    if (strcmp(mode,"1")==0 || strcmp(mode,"2"))break;
-  }
-  
-  char board[3][3];
-  for(int i = 0; i<3; i++){
-    for(int j = 0; j<3; j++){
-      board[i][j] = ' ';
-    }
-  }
-  signal(SIGINT,sighandler);
-  char* IP = "127.0.0.1";
-  if(argc>1){
-    IP=argv[1];
-  }
-  int server_socket = client_tcp_handshake(IP);
-  printf("client connected.\n");
-  clientLogic(server_socket);
 }
