@@ -5,20 +5,31 @@ static void sighandler(int signo) {
     exit(0);
   }
 }
-
-void subserver_logic(int client_socket){
-
+static int client[100];
+void matchmaking(int client_socket){
+  
 }
 
 int main(int argc, char *argv[] ) {
   signal(SIGINT,sighandler);
   int listen_socket = server_setup();
   printf("listening for connections...\n");
+  char buf[1025];
   while(1) {
-    int client_socket = server_tcp_handshake(listen_socket);
-    printf("client connected\n");
-    pid_t p = fork();
-    if (p==-1)perror("fork failed");
-    else if (p==0)subserver_logic(client_socket);
+    fd_set descriptors;
+    FD_ZERO(&descriptors);
+    FD_SET(listen_socket,&descriptors);
+    FD_SET(STDIN_FILENO,&descriptors);
+    int i = select(listen_socket+1,&descriptors,NULL,NULL,NULL);
+    if (FD_ISSET(STDIN_FILENO,&descriptors)) {
+      fgets(buf,sizeof(buf),stdin);
+      buf[strlen(buf)-1]=0;
+      printf("%s\n",buf); // put the game function here
+    }
+    if (FD_ISSET(listen_socket,&descriptors)) {
+      int client_socket = server_tcp_handshake(listen_socket);
+      printf("client connected\n");
+      matchmaking(client_socket);
+    }
   }
 }
