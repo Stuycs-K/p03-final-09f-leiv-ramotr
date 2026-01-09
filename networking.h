@@ -21,4 +21,6 @@ void err();
 int server_setup();
 int client_tcp_handshake(char*server_address);
 int server_tcp_handshake(int listen_socket);
+int updateboard(char *move, int player, char board[][]);
+void printboard(char board[][]);
 #endif
