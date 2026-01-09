@@ -45,14 +45,16 @@ void onlineplay() {
   if (bytes==0) err();
   int initialPlayer = player;
   while(1)  {     // change to function that assesses condition of game board
-    char move[100];
+    char move[2];
     if (player) {
+      printf("Waiting for opponent to move...\n");
       bytes = recv(server_socket,move,sizeof(move),0);
       if (bytes==0)err();
       update_board(move,initialPlayer);
       print_board();
     }
     else {
+      printf("Your turn to move: \n");
       while(1) {
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
@@ -60,6 +62,7 @@ void onlineplay() {
         if (success)break;
       }
       print_board();
+      send(server_socket,move,sizeof(move),0);
     }
     player = (player+1)%2;
   }
