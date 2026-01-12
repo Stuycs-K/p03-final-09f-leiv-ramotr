@@ -96,7 +96,7 @@ void online_match(int server_socket) {
         reset(server_socket);
         return;
       }
-      if (strcmp(move,"opponent left")==0) {
+      if (strncmp(move,"opponent left",13)==0) {
         printf("Opponent left. Searching for new opponent.");
         online_match(server_socket);
         return;
