@@ -13,10 +13,10 @@ void matchmaking(int client_socket){
 
 }
 
-void close_client(int fd, fd_set descriptors) {
-  FD_CLR(fd,&descriptors);
+void close_client(int fd, fd_set *descriptors) {
+  FD_CLR(fd,descriptors);
   close(fd);
-  if (fd<FD_SETSIZE)opponent[fd] = -1;
+  opponent[fd] = -1;
 }
 
 int main(int argc, char *argv[] ) {
@@ -43,7 +43,16 @@ int main(int argc, char *argv[] ) {
       else {
         char move[100];
         int bytes = recv(fd,move,sizeof(move),0);
-        if (bytes<0)err();
+        if (bytes<=0) {
+          int opp = opponent[fd];
+          close_client(fd,&descriptors);
+          if (opp!=-1) {
+            opponent[opp] = -1;
+            send(opp,"opponent left",13,0);
+            matchmaking(opp);
+          }
+          if (waiting_fd==fd)waiting_fd = 0;
+        }
       }
     }
     if (FD_ISSET(STDIN_FILENO,&descriptors)) {
