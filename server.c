@@ -9,8 +9,17 @@ static void sighandler(int signo) {
 static int opponent[100];
 static int waiting_fd = -1;
 
-void matchmaking(int client_socket){
-
+void matchmaking(int fd){
+  if (waiting_fd == -1) {
+    waiting_fd = fd;
+    return;
+  }
+  opponent[fd] = waiting_fd;
+  opponent[waiting_fd] = fd;
+  int p1 = 1, p2 = 2;
+  send(fd,&p1,sizeof(int),0);
+  send(waiting_fd,&p2,sizeof(int),0);
+  waiting_fd = -1;
 }
 
 void close_client(int fd, fd_set *descriptors) {
