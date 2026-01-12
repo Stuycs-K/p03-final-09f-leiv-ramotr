@@ -30,5 +30,7 @@ void reset_board();
 int check_board();
 void begin_play();
 void print_help();
+void reset(int server_socket);
+void online_match(int server_socket);
 extern char board[3][3];
 #endif
