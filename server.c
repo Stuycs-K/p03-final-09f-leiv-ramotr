@@ -6,7 +6,7 @@ static void sighandler(int signo) {
   }
 }
 
-static int opponent[100];
+static int opponent[FD_SETSIZE];
 static int waiting_fd = -1;
 
 void matchmaking(int fd){
@@ -26,6 +26,7 @@ void close_client(int fd, fd_set *descriptors) {
   FD_CLR(fd,descriptors);
   close(fd);
   opponent[fd] = -1;
+  printf("client disconnected\n");
 }
 
 int main(int argc, char *argv[] ) {
@@ -37,6 +38,9 @@ int main(int argc, char *argv[] ) {
   FD_ZERO(&descriptors);
   FD_SET(listen_socket,&descriptors);
   int max_fd = listen_socket;
+  for (int i = 0; i<FD_SETSIZE; i++) {
+    opponent[i] = -1;
+  }
   while(1) {
     int sel = select(max_fd+1,&descriptors,NULL,NULL,NULL);
     if (sel<0)err();
@@ -72,6 +76,13 @@ int main(int argc, char *argv[] ) {
           opponent[fd] = -1;
           opponent[opp] = -1;
           matchmaking(fd);
+          matchmaking(opp);
+          continue;
+        }
+        if (strncmp(move,"home",4)==0) {
+          // if client wants to leave server, requeue opponent
+          close_client(fd,&descriptors);
+          opponent[opp] = -1;
           matchmaking(opp);
           continue;
         }
