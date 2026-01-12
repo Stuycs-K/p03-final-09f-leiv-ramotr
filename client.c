@@ -47,10 +47,14 @@ void onlineplay() {
   if(strcmp(newIP,"home")==0)begin_play();
   int server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
-  reset_board();
+  online_match(server_socket);
+}
+
+void online_match(int server_socket) {
   printf("Waiting to be matched.... Enter \'home\' to return to home page.\n");
-  int player;
+  int player, bytes;
   fd_set descriptors;
+  char *input;
   FD_ZERO(&descriptors);
   FD_SET(server_socket,&descriptors);
   FD_SET(STDIN_FILENO,&descriptors);
@@ -68,25 +72,32 @@ void onlineplay() {
       }
     }
     if(FD_ISSET(server_socket, &descriptors)) {
-      int bytes = recv(server_socket,&player,sizeof(int),0);
+      bytes = recv(server_socket,&player,sizeof(int),0);
       if (bytes == 0) {
-        printf("Server disconnected.\n");
-        close(server_socket);
-        begin_play();
+        reset(server_socket);
         return;
       }
       break;
     }
   }
+  reset_board();
   int initialPlayer = player;
   while(check_board()==0) {
     char move[100];
+    printf_board();
     if (player==2) {
       printf("Waiting for opponent to move...\n");
       bytes = recv(server_socket,move,sizeof(move),0);
-      if (bytes==0)err();
+      if (bytes==0) {
+        reset(server_socket);
+        return;
+      }
+      if (strcmp(move,"opponent left")==0) {
+        printf("Opponent left. Searching for new opponent.");
+        online_match(server_socket);
+        return;
+      }
       update_board(move,initialPlayer%2+1);
-      print_board();
     }
     else {
       printf("Your turn to move: \n");
@@ -96,7 +107,6 @@ void onlineplay() {
         int success = update_board(move,initialPlayer);
         if (success)break;
       }
-      print_board();
       send(server_socket,move,sizeof(move),0);
     }
     player = player%2+1;
@@ -146,4 +156,10 @@ void localplay() {
   else if (result==3) {
     printf("Draw. What an intense match.\n");
   }
+}
+
+void reset(int server_socket) {
+  printf("Server disconnected.\n");
+  close(server_socket);
+  begin_play();
 }
