@@ -7,7 +7,7 @@ static void sighandler(int signo) {
 }
 static int client[100];
 void matchmaking(int client_socket){
-  
+
 }
 
 int main(int argc, char *argv[] ) {
@@ -15,21 +15,27 @@ int main(int argc, char *argv[] ) {
   int listen_socket = server_setup();
   printf("listening for connections...\n");
   char buf[1025];
+  fd_set descriptors;
+  FD_ZERO(&descriptors);
+  FD_SET(listen_socket,&descriptors);
+  int max_fd = listen_socket;
   while(1) {
-    fd_set descriptors;
-    FD_ZERO(&descriptors);
-    FD_SET(listen_socket,&descriptors);
-    FD_SET(STDIN_FILENO,&descriptors);
-    int i = select(listen_socket+1,&descriptors,NULL,NULL,NULL);
+    int sel = select(max_fd+1,&descriptors,NULL,NULL,NULL);
+    if (sel<0)err();
+    for (int fd = 0; fd<max_fd+1; fd++) {
+      if (!FD_ISSET(fd,&descriptors)) continue;
+      if (fd==listen_socket) {
+        int client_socket = server_tcp_handshake(listen_socket);
+        if (client_socket<0)continue;
+        if (client_socket>max_fd)max_fd=client_socket;
+        printf("client connected\n");
+        matchmaking(client_socket);
+      }
+    }
     if (FD_ISSET(STDIN_FILENO,&descriptors)) {
       fgets(buf,sizeof(buf),stdin);
       buf[strlen(buf)-1]=0;
       printf("%s\n",buf); // put the game function here
-    }
-    if (FD_ISSET(listen_socket,&descriptors)) {
-      int client_socket = server_tcp_handshake(listen_socket);
-      printf("client connected\n");
-      matchmaking(client_socket);
     }
   }
 }
