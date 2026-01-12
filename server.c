@@ -34,6 +34,7 @@ int main(int argc, char *argv[] ) {
     for (int fd = 0; fd<max_fd+1; fd++) {
       if (!FD_ISSET(fd,&descriptors)) continue;
       if (fd==listen_socket) {
+        // add new clients to list
         int client_socket = server_tcp_handshake(listen_socket);
         if (client_socket<0)continue;
         if (client_socket>max_fd)max_fd=client_socket;
@@ -41,24 +42,34 @@ int main(int argc, char *argv[] ) {
         matchmaking(client_socket);
       }
       else {
+        // accpet new moves
         char move[100];
         int bytes = recv(fd,move,sizeof(move),0);
+        int opp = opponent[fd];
         if (bytes<=0) {
-          int opp = opponent[fd];
+          // if client exited, add the opponent back to queue and close client
           close_client(fd,&descriptors);
           if (opp!=-1) {
             opponent[opp] = -1;
             send(opp,"opponent left",13,0);
             matchmaking(opp);
           }
+          // reset waiting_fd if it was waiting
           if (waiting_fd==fd)waiting_fd = 0;
+          continue;
         }
+        if (strncmp(move,"exit",4)==0) {
+          // if client wants a new game, requeue both
+          opponent[fd] = -1;
+          opponent[opp] = -1;
+          matchmaking(fd);
+          matchmaking(opp);
+          continue;
+        }
+        // send the move if normal behavior
+        send(opponent[fd],move,sizeof(move),0);
       }
     }
-    if (FD_ISSET(STDIN_FILENO,&descriptors)) {
-      fgets(buf,sizeof(buf),stdin);
-      buf[strlen(buf)-1]=0;
-      printf("%s\n",buf); // put the game function here
-    }
+
   }
 }
