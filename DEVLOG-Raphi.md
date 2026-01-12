@@ -22,4 +22,4 @@ Created local play to test the game. Made a way to return to main menu. Added cl
 
 ### 2026-01-11 - Matchmaking and online play
 Fixed client logic - split up into multiple functions, allowed for help screen, allowed either finding a new opponent or returning to home screen, used select to allow exiting while waiting for an opponent, added precautions for server or opponent disconnecting.
-Built server logic - created list to store opponents, matchmaking function that keeps one waiting_fd and pairs new clients with that or sets waiting_fd to the new client, used select to loop through listening_socket and all players to send moves between players and accept new clients, added precations to handle clients quitting.
+Built server logic - created list to store opponents, matchmaking function that keeps one waiting_fd and pairs new clients with that or sets waiting_fd to the new client, used select to loop through listening_socket and all players to send moves between players and accept new clients, added precautions to handle clients quitting.
