@@ -15,3 +15,6 @@ Goes through input from user. Ex. types BR and board is reprinted with bottom ri
 ### 2026-01-08 - Worked on game mechanics; finished win/draw mechanics
 Fixed notation so that it switches players (could only be played locally for now). Repeats.
 Added win and draw mechanics and fixed if there were any repeats in moves. (if move is valid.) spent a lil more than an hour.
+
+### 2026-01-11 - Added game manual
+When user types help, a manual will be printed.
