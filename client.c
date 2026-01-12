@@ -37,67 +37,80 @@ void begin_play() {
 
 void onlineplay() {
   char* IP = "127.0.0.1";
-  printf("Enter the IP Address of the server (Press enter if server is local or enter exit to go back to main menu):\n");
+  printf("Enter the IP Address of the server (Press enter if server is local or enter \'home\' to go back to main menu):\n");
   char newIP[20];
   char *input = fgets(newIP,sizeof(newIP),stdin);
   newIP[strlen(newIP)-1] = 0;
   if(strlen(newIP)!=0){
     IP=newIP;
   }
-  if(strcmp(newIP,"exit")==0)begin_play();
+  if(strcmp(newIP,"home")==0)begin_play();
   int server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
   reset_board();
-  printf("Waiting to be matched.... Enter exit to return to home page.\n");
+  printf("Waiting to be matched.... Enter \'home\' to return to home page.\n");
   int player;
   fd_set descriptors;
   FD_ZERO(&descriptors);
   FD_SET(server_socket,&descriptors);
   FD_SET(STDIN_FILENO,&descriptors);
-  int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
-  if (FD_ISSET(STDIN_FILENO,&descriptors)) {
-    char buf[100];
-    input = fgets(buf,sizeof(buf),stdin);
-    buf[strlen(buf)-1] = 0;
-    if(strcmp(buf,"exit")==0)begin_play();
+  while (1) {
+    int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
+    if (FD_ISSET(STDIN_FILENO,&descriptors)) {
+      char buf[100];
+      input = fgets(buf,sizeof(buf),stdin);
+      buf[strlen(buf)-1] = 0;
+      if(strcmp(buf,"home")==0) {
+        send(server_socket,buf,sizeof(buf),0);
+        close(server_socket);
+        begin_play();
+        return;
+      }
+    }
+    if(FD_ISSET(server_socket, &descriptors)) {
+      int bytes = recv(server_socket,&player,sizeof(int),0);
+      if (bytes == 0) {
+        printf("Server disconnected.\n");
+        close(server_socket);
+        begin_play();
+        return;
+      }
+      break;
+    }
   }
-  else if(FD_ISSET(server_socket, &descriptors)) {
-    int bytes = recv(server_socket,&player,sizeof(int),0);
-    if (bytes==0) err();
-    int initialPlayer = player;
-    while(check_board()==0) {
-      char move[100];
-      if (player==2) {
-        printf("Waiting for opponent to move...\n");
-        bytes = recv(server_socket,move,sizeof(move),0);
-        if (bytes==0)err();
-        update_board(move,initialPlayer%2+1);
-        print_board();
+  int initialPlayer = player;
+  while(check_board()==0) {
+    char move[100];
+    if (player==2) {
+      printf("Waiting for opponent to move...\n");
+      bytes = recv(server_socket,move,sizeof(move),0);
+      if (bytes==0)err();
+      update_board(move,initialPlayer%2+1);
+      print_board();
+    }
+    else {
+      printf("Your turn to move: \n");
+      while(1) {
+        input = fgets(move,sizeof(move),stdin);
+        if (input==NULL)err();
+        int success = update_board(move,initialPlayer);
+        if (success)break;
       }
-      else {
-        printf("Your turn to move: \n");
-        while(1) {
-          input = fgets(move,sizeof(move),stdin);
-          if (input==NULL)err();
-          int success = update_board(move,initialPlayer);
-          if (success)break;
-        }
-        print_board();
-        send(server_socket,move,sizeof(move),0);
-      }
-      player = player%2+1;
+      print_board();
+      send(server_socket,move,sizeof(move),0);
     }
-    print_board();
-    int result = check_board();
-    if ((result==1 && player==1) || (result==2 && player==2)) {
-      printf("You win!\n");
-    }
-    else if ((result==1 && player==2) || (result==2 && player==1)) {
-      printf("You lose... better luck next time.\n");
-    }
-    else if (result==3) {
-      printf("Draw. What an intense match.\n");
-    }
+    player = player%2+1;
+  }
+  print_board();
+  int result = check_board();
+  if ((result==1 && player==1) || (result==2 && player==2)) {
+    printf("You win!\n");
+  }
+  else if ((result==1 && player==2) || (result==2 && player==1)) {
+    printf("You lose... better luck next time.\n");
+  }
+  else if (result==3) {
+    printf("Draw. What an intense match.\n");
   }
 }
 
