@@ -84,7 +84,7 @@ void online_match(int server_socket) {
   int initialPlayer = player;
   while(check_board()==0) {
     char move[100];
-    printf_board();
+    print_board();
     if (player==2) {
       printf("Waiting for opponent to move...\n");
       bytes = recv(server_socket,move,sizeof(move),0);
@@ -100,12 +100,17 @@ void online_match(int server_socket) {
       update_board(move,initialPlayer%2+1);
     }
     else {
-      printf("Your turn to move: \n");
       while(1) {
+        printf("Your turn to move: \n");
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
-        int success = update_board(move,initialPlayer);
-        if (success)break;
+        move[strlen(move)-1] = 0;
+        if (strcmp(move,"help")==0)print_help();
+        else {
+          int success = update_board(move,initialPlayer);
+          if (success)break;
+          printf("invalid move. enter \'help\' for more info. ");
+        }
       }
       send(server_socket,move,sizeof(move),0);
     }
@@ -113,10 +118,10 @@ void online_match(int server_socket) {
   }
   print_board();
   int result = check_board();
-  if ((result==1 && player==1) || (result==2 && player==2)) {
+  if ((result==1 && initialPlayer==1) || (result==2 && initialPlayer==2)) {
     printf("You win!\n");
   }
-  else if ((result==1 && player==2) || (result==2 && player==1)) {
+  else if ((result==1 && initialPlayer==2) || (result==2 && initialPlayer==1)) {
     printf("You lose... better luck next time.\n");
   }
   else if (result==3) {
