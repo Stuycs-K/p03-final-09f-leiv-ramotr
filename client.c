@@ -1,7 +1,11 @@
 #include "networking.h"
 
+static int server_socket;
+
 static void sighandler(int signo) {
   if (signo==SIGINT) {
+    char message[20] = "home";
+    send(server_socket,message,4,0);
     printf("\n");
     exit(0);
   }
@@ -45,7 +49,7 @@ void onlineplay() {
     IP=newIP;
   }
   if(strcmp(newIP,"home")==0)begin_play();
-  int server_socket = client_tcp_handshake(IP);
+  server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
   online_match(server_socket);
 }
