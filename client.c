@@ -112,9 +112,13 @@ void localplay() {
       printf("%c's turn: ",piece);
       char *input = fgets(move,sizeof(move),stdin);
       if (input==NULL)err();
-      int success = update_board(move,player);
-      if (success)break;
-      printf("invalid move. ");
+      move[strlen(move)-1] = 0;
+      if (strcmp(move,"help")==0)print_help();
+      else {
+        int success = update_board(move,player);
+        if (success)break;
+        printf("invalid move. enter \'help\' for more info. ");
+      }
     }
     player = player%2+1;
   }
