@@ -4,8 +4,8 @@ static int server_socket;
 
 static void sighandler(int signo) {
   if (signo==SIGINT) {
-    char message[20] = "home";
-    send(server_socket,message,4,0);
+    char message[20] = "client exiting";
+    send(server_socket,message,sizeof(message),0);
     printf("\n");
     exit(0);
   }

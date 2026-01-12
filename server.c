@@ -63,7 +63,7 @@ int main(int argc, char *argv[] ) {
         char move[100];
         int bytes = recv(fd,move,sizeof(move),0);
         int opp = opponent[fd];
-        if (bytes<=0) {
+        if (bytes<=0 || strncmp(move,"client exiting",14)==0) {
           // if client exited, add the opponent back to queue and close client
           close_client(fd,&descriptors);
           if (opp!=-1) {
