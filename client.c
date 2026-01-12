@@ -46,43 +46,56 @@ void onlineplay() {
   int server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
   reset_board();
-  printf("Waiting to be matched....\n");
+  printf("Waiting to be matched.... Enter exit to return to home page.\n");
   int player;
-  int bytes = recv(server_socket,&player,sizeof(int),0);
-  if (bytes==0) err();
-  int initialPlayer = player;
-  while(check_board()==0) {
-    char move[100];
-    if (player==2) {
-      printf("Waiting for opponent to move...\n");
-      bytes = recv(server_socket,move,sizeof(move),0);
-      if (bytes==0)err();
-      update_board(move,initialPlayer%2+1);
-      print_board();
-    }
-    else {
-      printf("Your turn to move: \n");
-      while(1) {
-        input = fgets(move,sizeof(move),stdin);
-        if (input==NULL)err();
-        int success = update_board(move,initialPlayer);
-        if (success)break;
+  fd_set descriptors;
+  FD_ZERO(&descriptors);
+  FD_SET(server_socket,&descriptors);
+  FD_SET(STDIN_FILENO,&descriptors);
+  int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
+  if (FD_ISSET(STDIN_FILENO,&descriptors)) {
+    char buf[100];
+    input = fgets(buf,sizeof(buf),stdin);
+    buf[strlen(buf)-1] = 0;
+    if(strcmp(buf,"exit")==0)begin_play();
+  }
+  else if(FD_ISSET(server_socket, &descriptors)) {
+    int bytes = recv(server_socket,&player,sizeof(int),0);
+    if (bytes==0) err();
+    int initialPlayer = player;
+    while(check_board()==0) {
+      char move[100];
+      if (player==2) {
+        printf("Waiting for opponent to move...\n");
+        bytes = recv(server_socket,move,sizeof(move),0);
+        if (bytes==0)err();
+        update_board(move,initialPlayer%2+1);
+        print_board();
       }
-      print_board();
-      send(server_socket,move,sizeof(move),0);
+      else {
+        printf("Your turn to move: \n");
+        while(1) {
+          input = fgets(move,sizeof(move),stdin);
+          if (input==NULL)err();
+          int success = update_board(move,initialPlayer);
+          if (success)break;
+        }
+        print_board();
+        send(server_socket,move,sizeof(move),0);
+      }
+      player = player%2+1;
     }
-    player = player%2+1;
-  }
-  print_board();
-  int result = check_board();
-  if ((result==1 && player==1) || (result==2 && player==2)) {
-    printf("You win!\n");
-  }
-  else if ((result==1 && player==2) || (result==2 && player==1)) {
-    printf("You lose... better luck next time.\n");
-  }
-  else if (result==3) {
-    printf("Draw. What an intense match.\n");
+    print_board();
+    int result = check_board();
+    if ((result==1 && player==1) || (result==2 && player==2)) {
+      printf("You win!\n");
+    }
+    else if ((result==1 && player==2) || (result==2 && player==1)) {
+      printf("You lose... better luck next time.\n");
+    }
+    else if (result==3) {
+      printf("Draw. What an intense match.\n");
+    }
   }
 }
 
