@@ -16,5 +16,8 @@ Goes through input from user. Ex. types BR and board is reprinted with bottom ri
 Fixed notation so that it switches players (could only be played locally for now). Repeats.
 Added win and draw mechanics and fixed if there were any repeats in moves. (if move is valid.) spent a lil more than an hour.
 
+### 2026-01-09 - Game Logic w/ local play
+Worked with Raphi on his computer to created local play and test the game. Made a way to return to main menu. Added clearer instructions.
+
 ### 2026-01-11 - Added game manual
 When user types help, a manual will be printed.
