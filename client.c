@@ -19,7 +19,9 @@ void begin_play() {
   while(1) {
     char *in = fgets(mode,sizeof(mode),stdin);
     if (in==NULL)err();
-    if(strcmp(mode,"help")==0)print_help();
+    if(strncmp(mode,"help",4)==0){
+      print_help();
+    }
     if (mode[0]=='1' || mode[0]=='2')break;
     else {
       printf("Please only type 1 or 2.\n");
