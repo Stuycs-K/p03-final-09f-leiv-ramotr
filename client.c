@@ -87,6 +87,8 @@ void online_match() {
 }
 
 void online_game(int player) {
+  int bytes;
+  char *input;
   reset_board();
   int initialPlayer = player;
   while(check_board()==0) {
@@ -134,10 +136,31 @@ void online_game(int player) {
   else if (result==3) {
     printf("Draw. What an intense match.\n");
   }
+  printf("\nIf you would like to play again, hit enter. If you want to find a new opponent, enter \'exit\'. To return to the home menu, enter \'home\'.\n");
+  char in[100];
+  while(1) {
+    input = fgets(in,sizeof(in),stdin);
+    if (input==NULL)err();
+    in[strlen(in)-1] = 0;
+    if (strlen(in)==0) {
+      online_game(initialPlayer%2+1);
+      return;
+    }
+    if (strcmp(in,"exit")==0) {
+      send(server_socket,in,sizeof(in),0);
+      online_match();
+      return;
+    }
+    if (strcmp(in,"home")==0) {
+      send(server_socket,in,sizeof(in),0);
+      close(server_socket);
+      begin_play();
+      return;
+    }
+    printf("Please press enter to play again, \'exit\' to find a new opponent, or \'home\' to return home.\n");
+  }
 
-  //now ask if they want to play again
   //check if people enter 'home' and send that to server.
-  //if they leave then send exit to server
   //if they say new opponent then save the fd of this opponent in a list in the server file
   //add a second waiting slot to server
 }
