@@ -20,6 +20,7 @@ The game is played as follows:
 2. To play the game, type the coordinates of an empty box.
     Top (T), Middle(M), Bottom (B), Left (L), Right(R)  
     | TL | TM | TR |  
+    |----|----|----|
     | ML | MM | MR |  
     | BL | BM | BR |  
 3. If already taken, you will be prompted to choose a different spot.
