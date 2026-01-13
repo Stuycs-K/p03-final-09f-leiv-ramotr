@@ -51,10 +51,10 @@ void onlineplay() {
   if(strcmp(newIP,"home")==0)begin_play();
   server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
-  online_match(server_socket);
+  online_match();
 }
 
-void online_match(int server_socket) {
+void online_match() {
   printf("Waiting to be matched.... Enter \'home\' to return to home page.\n");
   int player, bytes;
   fd_set descriptors;
@@ -84,6 +84,9 @@ void online_match(int server_socket) {
       break;
     }
   }
+}
+
+void online_game(int player) {
   reset_board();
   int initialPlayer = player;
   while(check_board()==0) {
@@ -131,6 +134,12 @@ void online_match(int server_socket) {
   else if (result==3) {
     printf("Draw. What an intense match.\n");
   }
+
+  //now ask if they want to play again
+  //check if people enter 'home' and send that to server.
+  //if they leave then send exit to server
+  //if they say new opponent then save the fd of this opponent in a list in the server file
+  //add a second waiting slot to server
 }
 
 void localplay() {
