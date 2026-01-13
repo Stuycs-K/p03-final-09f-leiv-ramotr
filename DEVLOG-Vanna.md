@@ -21,3 +21,6 @@ Worked with Raphi on his computer to created local play and test the game. Made 
 
 ### 2026-01-11 - Added game manual
 When user types help, a manual will be printed.
+
+### 2026-01-13 - Wrote Script
+Discussed with Raphi next steps and then I worked on the script for the video.
