@@ -26,7 +26,8 @@ The game is played as follows:
 3. If already taken, you will be prompted to choose a different spot.
 4. Wait for your opponent's turn and repeat.
 5. Have your pieces three in a row, column, or diagonal to win.
-6. When the game is over, you will have the option to play again with the same opponent, never play again with the same opponent and find a new opponent, or return to the home menu.
+6. When the game is over, you will have the option to play again with the same client, or play with a new opponent, or return to the home menu.
+7. If you want to return to the home menu anytime during the game, you can just type 'home'.
 
 ### Resources/ References:
 
