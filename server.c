@@ -63,7 +63,7 @@ int main(int argc, char *argv[] ) {
         char move[100];
         int bytes = recv(fd,move,sizeof(move),0);
         int opp = opponent[fd];
-        if (bytes<=0 || strncmp(move,"client exiting",14)==0) {
+        if (bytes<=0 || strncmp(move,"home",4)==0) {
           // if client exited, add the opponent back to queue and close client
           close_client(fd,&descriptors);
           if (opp!=-1) {
@@ -79,15 +79,6 @@ int main(int argc, char *argv[] ) {
           opponent[opp] = -1;
           matchmaking(fd);
           matchmaking(opp);
-          continue;
-        }
-        if (strncmp(move,"home",4)==0) {
-          // if client wants to leave server, requeue opponent
-          close_client(fd,&descriptors);
-          if (opp!=-1) {
-            opponent[opp] = -1;
-            matchmaking(opp);
-          }
           continue;
         }
         // send the move if normal behavior
