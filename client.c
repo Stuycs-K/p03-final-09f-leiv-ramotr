@@ -103,7 +103,7 @@ void online_game(int player) {
         return;
       }
       if (strncmp(move,"opponent left",13)==0) {
-        printf("Opponent left. Searching for new opponent.");
+        printf("Opponent left. Searching for new opponent.\n");
         online_match();
         return;
       }
@@ -116,8 +116,8 @@ void online_game(int player) {
         if (input==NULL)err();
         move[strlen(move)-1] = 0;
         if (strcmp(move,"help")==0)print_help();
-        else if(strcmp(buf,"home")==0) {
-          send(server_socket,buf,sizeof(buf),0);
+        else if(strcmp(move,"home")==0) {
+          send(server_socket,move,sizeof(move),0);
           close(server_socket);
           begin_play();
           return;
@@ -145,27 +145,53 @@ void online_game(int player) {
   }
   printf("\nIf you would like to play again, hit enter. If you want to find a new opponent, enter \'exit\'. To return to the home menu, enter \'home\'.\n");
   char in[100];
-  //need select to check if server receives info from opponent
+  fd_set descriptors;
+  FD_ZERO(&descriptors);
+  FD_SET(server_socket,&descriptors);
+  FD_SET(STDIN_FILENO,&descriptors);
   while(1) {
-    input = fgets(in,sizeof(in),stdin);
-    if (input==NULL)err();
-    in[strlen(in)-1] = 0;
-    if (strlen(in)==0) {
-      online_game(initialPlayer%2+1);
-      return;
+    int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
+    if (FD_ISSET(STDIN_FILENO,&descriptors)) {
+      input = fgets(in,sizeof(in),stdin);
+      if (input==NULL)err();
+      in[strlen(in)-1] = 0;
+      if (strlen(in)==0) {
+        send(server_socket,"play again",10,0);
+        char response[100];
+        printf("Waiting for opponent to choose...\n");
+        recv(server_socket,response,sizeof(response),0);
+        // now act based on response
+        online_game(initialPlayer%2+1);
+        return;
+      }
+      if (strcmp(in,"exit")==0) {
+        send(server_socket,in,sizeof(in),0);
+        online_match();
+        return;
+      }
+      if (strcmp(in,"home")==0) {
+        send(server_socket,in,sizeof(in),0);
+        close(server_socket);
+        begin_play();
+        return;
+      }
+      printf("Please press enter to play again, \'exit\' to find a new opponent, or \'home\' to return home.\n");
     }
-    if (strcmp(in,"exit")==0) {
-      send(server_socket,in,sizeof(in),0);
-      online_match();
-      return;
+    if (FD_ISSET(server_socket,&descriptors)) {
+      bytes = recv(server_socket,in,sizeof(in),0);
+      if (bytes == 0) {
+        reset(server_socket);
+        return;
+      }
+      if (strncmp(in,"opponent left",13)==0) {
+        printf("Opponent left. Searching for new opponent.\n");
+        online_match();
+        return;
+      }
+      if (strncmp(in,"play again",10)==0) {
+        printf("Opponent would like to play again. Press enter to play.\n");
+      }
     }
-    if (strcmp(in,"home")==0) {
-      send(server_socket,in,sizeof(in),0);
-      close(server_socket);
-      begin_play();
-      return;
-    }
-    printf("Please press enter to play again, \'exit\' to find a new opponent, or \'home\' to return home.\n");
   }
 
   //if they say new opponent then save the fd of this opponent in a list in the server file
