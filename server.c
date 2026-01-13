@@ -75,6 +75,7 @@ int main(int argc, char *argv[] ) {
         }
         if (strncmp(move,"exit",4)==0) {
           // if client wants a new game, requeue both
+          send(opp,"opponent left",13,0);
           opponent[fd] = -1;
           opponent[opp] = -1;
           matchmaking(fd);
