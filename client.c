@@ -164,12 +164,12 @@ void online_game(int player) {
         if (playopp==1)break;
         printf("Waiting to play again...\n");
       }
-      else if (strcmp(in,"exit")==0) {
+      else if (strncmp(in,"exit",4)==0) {
         send(server_socket,in,sizeof(in),0);
         online_match();
         return;
       }
-      else if (strcmp(in,"home")==0) {
+      else if (strncmp(in,"home",4)==0) {
         send(server_socket,in,sizeof(in),0);
         close(server_socket);
         begin_play();
