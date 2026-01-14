@@ -48,3 +48,8 @@ Before we begin, if you want to follow along, you can get all our code from the 
 *plays a game*
 
 [Vanna] Aw man I still lost anyways. I don't want to play with you anymore. 
+
+
+Points to add: Invalid moves; options availible after the game has ended;
+
+What almost worked?
