@@ -78,7 +78,7 @@ void online_match() {
     if(FD_ISSET(server_socket, &descriptors)) {
       bytes = recv(server_socket,&player,sizeof(int),0);
       if (bytes == 0) {
-        reset(server_socket);
+        reset();
         return;
       }
       break;
@@ -111,6 +111,7 @@ void online_game(int player) {
     }
     else {
       while(1) {
+        // need to block moving while its opponent's turn
         printf("Your turn to move: \n");
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
@@ -150,6 +151,7 @@ void online_game(int player) {
   FD_SET(server_socket,&descriptors);
   FD_SET(STDIN_FILENO,&descriptors);
   while(1) {
+    int play = 0, playopp = 0;
     int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
     if (FD_ISSET(STDIN_FILENO,&descriptors)) {
       input = fgets(in,sizeof(in),stdin);
@@ -158,11 +160,9 @@ void online_game(int player) {
       if (strlen(in)==0) {
         send(server_socket,"play again",10,0);
         char response[100];
-        printf("Waiting for opponent to choose...\n");
-        recv(server_socket,response,sizeof(response),0);
-        // now act based on response
-        online_game(initialPlayer%2+1);
-        return;
+        play = 1;
+        if (playopp==1)break;
+        printf("Waiting to play again...\n");
       }
       if (strcmp(in,"exit")==0) {
         send(server_socket,in,sizeof(in),0);
@@ -180,7 +180,7 @@ void online_game(int player) {
     if (FD_ISSET(server_socket,&descriptors)) {
       bytes = recv(server_socket,in,sizeof(in),0);
       if (bytes == 0) {
-        reset(server_socket);
+        reset();
         return;
       }
       if (strncmp(in,"opponent left",13)==0) {
@@ -189,11 +189,16 @@ void online_game(int player) {
         return;
       }
       if (strncmp(in,"play again",10)==0) {
-        printf("Opponent would like to play again. Press enter to play.\n");
+        printf("Opponent would like to play again.");
+        playopp = 1;
+        if (play = 1)break;
+        printf("Press enter to play.\n");
       }
     }
   }
-
+  printf("Beginning new game.\n");
+  online_game(initialPlayer%2+1);
+  return;
   //if they say new opponent then save the fd of this opponent in a list in the server file
   //add a second waiting slot to server
 }
@@ -232,7 +237,7 @@ void localplay() {
   }
 }
 
-void reset(int server_socket) {
+void reset() {
   printf("Server disconnected.\n");
   close(server_socket);
   begin_play();
