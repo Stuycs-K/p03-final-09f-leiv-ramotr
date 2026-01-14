@@ -35,8 +35,10 @@ void close_client(int fd, fd_set *descriptors) {
   FD_CLR(fd,descriptors);
   close(fd);
   opponent[fd] = -1;
+  last_played[fd] = -1;
   // reset waiting_fd if it was waiting
   if (waiting_fd==fd)waiting_fd = -1;
+  if (waiting_fd2==fd)waiting_fd2 = -1;
   printf("client disconnected\n");
 }
 
@@ -74,6 +76,7 @@ int main(int argc, char *argv[] ) {
         int opp = opponent[fd];
         if (bytes<=0 || strncmp(move,"home",4)==0) {
           // if client exited, add the opponent back to queue and close client
+          // doesn't set last_played if opponent leaves game
           close_client(fd,&descriptors);
           if (opp!=-1) {
             opponent[opp] = -1;
@@ -83,12 +86,19 @@ int main(int argc, char *argv[] ) {
           continue;
         }
         if (strncmp(move,"exit",4)==0) {
-          // if client wants a new game, requeue both
+          // if client wants a new game, requeue both and set last_played
           send(opp,"opponent left",13,0);
           opponent[fd] = -1;
           opponent[opp] = -1;
+          last_played[fd] = opp;
+          last_played[opp] = fd;
           matchmaking(fd);
           matchmaking(opp);
+          continue;
+        }
+        // send play again message across game
+        if (strncmp(move,"play again",10)==0) {
+          send(opp,move,10,0);
           continue;
         }
         // send the move if normal behavior
