@@ -47,9 +47,14 @@ Before we begin, if you want to follow along, you can get all our code from the 
 
 *plays a game*
 
-[Vanna] Aw man I still lost anyways. I don't want to play with you anymore. 
+[Vanna] Aw man I still lost anyways. I don't want to play with you anymore.
 
 
 Points to add: Invalid moves; options availible after the game has ended;
 
 What almost worked?
+
+
+When IP is not a server, give option to retype it
+exit after endgame needs to be fixed
+when multiple clients, and 2 of them leave and one of them tries to join, matched with ghost client, but by themselves.

@@ -24,3 +24,6 @@ When user types help, a manual will be printed.
 
 ### 2026-01-13 - Wrote Script
 Discussed with Raphi next steps and then I worked on the script for the video.
+
+### 2026-01-14 - Debug and Testing
+Tested code and tried to debug and find bugs on our computers with Raphi. Errors are in the script.md server. The problems we have are involved in endgame matchmaking.
