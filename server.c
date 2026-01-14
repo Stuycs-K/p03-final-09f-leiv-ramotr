@@ -6,12 +6,18 @@ static void sighandler(int signo) {
   }
 }
 
-static int opponent[FD_SETSIZE];
-static int waiting_fd = -1;
+static int opponent[FD_SETSIZE], last_played[FD_SETSIZE];
+static int waiting_fd = -1, waiting_fd2 = -1;
 
 void matchmaking(int fd){
+  // if queue is empty, put them in queue
   if (waiting_fd == -1) {
     waiting_fd = fd;
+    return;
+  }
+  // if player in queue is who they last played, queue them too
+  if (waiting_fd == last_played[fd]) {
+    waiting_fd2 = fd;
     return;
   }
   opponent[fd] = waiting_fd;
@@ -19,7 +25,10 @@ void matchmaking(int fd){
   int p1 = 1, p2 = 2;
   send(fd,&p2,sizeof(int),0);
   send(waiting_fd,&p1,sizeof(int),0);
-  waiting_fd = -1;
+  // move second client in queue to first spot, set second spot to -1
+  // if second spot is empty, this will just set them both to -1
+  waiting_fd = waiting_fd2;
+  waiting_fd2 = -1;
 }
 
 void close_client(int fd, fd_set *descriptors) {
