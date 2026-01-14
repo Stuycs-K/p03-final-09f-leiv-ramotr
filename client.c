@@ -111,7 +111,6 @@ void online_game(int player) {
     }
     else {
       while(1) {
-        fpurge(stdin);
         printf("Your turn to move: \n");
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
@@ -150,8 +149,8 @@ void online_game(int player) {
   FD_ZERO(&descriptors);
   FD_SET(server_socket,&descriptors);
   FD_SET(STDIN_FILENO,&descriptors);
+  int play = 0, playopp = 0;
   while(1) {
-    int play = 0, playopp = 0;
     int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
     if (FD_ISSET(STDIN_FILENO,&descriptors)) {
       input = fgets(in,sizeof(in),stdin);
