@@ -111,7 +111,7 @@ void online_game(int player) {
     }
     else {
       while(1) {
-        // need to block moving while its opponent's turn
+        fpurge(stdin);
         printf("Your turn to move: \n");
         input = fgets(move,sizeof(move),stdin);
         if (input==NULL)err();
@@ -189,9 +189,9 @@ void online_game(int player) {
         return;
       }
       if (strncmp(in,"play again",10)==0) {
-        printf("Opponent would like to play again.");
+        printf("Opponent would like to play again. ");
         playopp = 1;
-        if (play = 1)break;
+        if (play==1)break;
         printf("Press enter to play.\n");
       }
     }
