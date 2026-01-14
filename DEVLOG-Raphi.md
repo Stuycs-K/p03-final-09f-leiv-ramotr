@@ -30,3 +30,6 @@ Spent class testing with Vanna. Fixed errors in the scoring system, allowed the 
 ### 2026-01-13 - Ending games
 Worked on exiting logic - created separate functions for finding a new game and starting a game so it can reset a game instead of always finding a new opponent.
 At home: used select to get input from what opponent does after game is over and communicate between players to either play again, exit, or return to home menu.
+
+### 2026-01-14 - Testing End Logic
+Tested with Vanna. Found small and big bugs that will look into at home.
