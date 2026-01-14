@@ -84,6 +84,7 @@ void online_match() {
       break;
     }
   }
+  printf("Matched!\n");
   online_game(player);
 }
 
@@ -163,18 +164,19 @@ void online_game(int player) {
         if (playopp==1)break;
         printf("Waiting to play again...\n");
       }
-      if (strcmp(in,"exit")==0) {
+      else if (strcmp(in,"exit")==0) {
         send(server_socket,in,sizeof(in),0);
         online_match();
         return;
       }
-      if (strcmp(in,"home")==0) {
+      else if (strcmp(in,"home")==0) {
         send(server_socket,in,sizeof(in),0);
         close(server_socket);
         begin_play();
         return;
       }
-      printf("Please press enter to play again, \'exit\' to find a new opponent, or \'home\' to return home.\n");
+      else
+        printf("Please press enter to play again, \'exit\' to find a new opponent, or \'home\' to return home.\n");
     }
     if (FD_ISSET(server_socket,&descriptors)) {
       bytes = recv(server_socket,in,sizeof(in),0);
