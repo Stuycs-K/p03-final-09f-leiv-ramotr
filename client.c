@@ -43,15 +43,22 @@ void begin_play() {
 void onlineplay() {
   char* IP = "127.0.0.1";
   printf("Enter the IP Address of the server (Press enter if server is local or enter \'home\' to go back to main menu):\n");
-  char newIP[20];
-  char *input = fgets(newIP,sizeof(newIP),stdin);
-  if (input==NULL)err();
-  newIP[strlen(newIP)-1] = 0;
-  if(strlen(newIP)!=0){
-    IP=newIP;
+  char newIP[100];
+  while (1) {
+    char *input = fgets(newIP,sizeof(newIP),stdin);
+    if (input==NULL)err();
+    newIP[strlen(newIP)-1] = 0;
+    if(strlen(newIP)!=0){
+      IP=newIP;
+    }
+    if(strcmp(newIP,"home")==0) {
+      begin_play();
+      return;
+    }
+    server_socket = client_tcp_handshake(IP);
+    if (server_socket>-1)break;
+    printf("Couldn't connect to server. Please enter IP Address or press enter if server is local.\n");
   }
-  if(strcmp(newIP,"home")==0)begin_play();
-  server_socket = client_tcp_handshake(IP);
   printf("Connected to server.\n");
   online_match();
 }
