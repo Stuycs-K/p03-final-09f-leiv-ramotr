@@ -22,8 +22,10 @@ void print_help() {
   printf("3. If already taken, you will be prompted to choose a different spot.\n");
   printf("4. Wait for your opponent's turn and repeat. Enter \'home\' at any time to return to the home menu.\n");
   printf("5. Have your pieces three in a row or diagonally to win.\n");
-  printf("6. When the game is over, you will have the option to play again with the same opponent, play with a new opponent, or return to the home menu.\n");
+  printf("6. If you are playing online, when the game is over, you will have the option to play again with the same opponent, play with a new opponent, or return to the home menu.\n");
   printf("7. If your opponent leaves, you will be sent to the queue to wait for a new opponent. If the server disconnects, you will be sent to the home menu.\n");
+  printf("8. If you are playing locally, you can play again or return home by typing \'home\'. after the game end\n");
+  printf("\n");
 }
 
 void reset_board() {
