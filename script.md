@@ -9,7 +9,7 @@ Before we begin, if you want to follow along, you can get all our code from the 
 
 [Vanna] Yeah so I'm gonna type 1 for locally. Oh wow, the board opened.
 
-[Raphi] In order to move, you type one of the coordinates of the tile. If you type help, the manual opens and if you look right here, you can see what each tile is. So TR for top right corner, MM, for middle box, etc. Top, Right, Left, and Middle.
+[Raphi] In order to move, you type one of the coordinates of the tile. If you type help, the manual opens and if you look right here, you can see what each tile is. So TR for top right corner, MM, for middle box, etc. Top, Right, Left, and Middle. If you type anything else, it will say invalid move.
 
 [Vanna] play. I'm going to go TR. Now my imaginary friend right next to me wants to go MM. *speeds up until the end*. Oh no! I lost! I want a rematch.
 
@@ -21,9 +21,9 @@ Before we begin, if you want to follow along, you can get all our code from the 
 [Raphi] Type home to go back to the main menu. You can type home and help anytime to go back to the main menu or open the manual.  
 
 [Vanna] okay. *types home* Okay, so I just type 2 to go online right.
-[Raphi] Yeah. You will be prompted to enter the IP address of the server you are joining to. If the server is local, press enter to wait to connect. If there is no server open, the connection will close.
+[Raphi] Yeah. You will be prompted to enter the IP address of the server you are joining to. If the server is local, press enter to wait to connect. If there is no server open, you will be prompted to put in a new IP adress.
 
-[Vanna] I see. And I can just type home if I'm tired of waiting. Okay I'm going to play online. What's your server adress.
+[Vanna] I see. And I can just type home if I'm tired of waiting. Okay I'm going to play online. *types random thing* What's your server adress.
 
 [Raphi] Server address
 
@@ -49,12 +49,35 @@ Before we begin, if you want to follow along, you can get all our code from the 
 
 [Vanna] Aw man I still lost anyways. I don't want to play with you anymore.
 
+[Raphi] You could type exit to find a new opponent. And you will never be matched with me your next game. Or just say you hate me. But you can never get rid of me because I can wait to match with you the game after that.
+
+[Vanna] *type exit* Great I don't need to play with Raphi again. I'm gonna get a cup of water while waiting for a new opponent. *leaves camera*
+
+[Raphi] *open a new client.* haha that's actually me. So who's gonna tell her
+
+[Vanna]  *come back* Oh I matched! *speed runs* Yay I won.
+
+[Raphi] *hits enter*
+
+[Vanna] Oh yay my opponent who sucks at tic tac toe tomatetoe tomauto wants to play again. Wait Raphi what do I do?
+
+[Raphi] BRo can't you read? Just press enter.
+
+[Vanna] okay. *plays* *server disconnects* oh no what happened/
+
+[Raphi] Oops I closed the server. *opne again*
+
+*play again*
+*reuslt*
+[] *types exit*
+
+// show exit
+
+
+*result* Okay I'm gonna take a break. *go back to home*
+
+
+
+
 
 Points to add: Invalid moves; options availible after the game has ended;
-
-What almost worked?
-
-
-When IP is not a server, give option to retype it
-exit after endgame needs to be fixed
-when multiple clients, and 2 of them leave and one of them tries to join, matched with ghost client, but by themselves.
