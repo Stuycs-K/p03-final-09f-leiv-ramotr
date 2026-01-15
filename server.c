@@ -16,7 +16,7 @@ void matchmaking(int fd){
     return;
   }
   // if player in queue is who they last played, queue them too
-  if (waiting_fd == last_played[fd]) {
+  if (waiting_fd == last_played[fd] && fd == last_played[waiting_fd]) {
     waiting_fd2 = fd;
     return;
   }
@@ -37,8 +37,11 @@ void close_client(int fd, fd_set *descriptors, int *max_fd) {
   opponent[fd] = -1;
   last_played[fd] = -1;
   // reset waiting_fd if it was waiting
-  if (waiting_fd==fd)waiting_fd = -1;
-  if (waiting_fd2==fd)waiting_fd2 = -1;
+  if (waiting_fd==fd) {
+    waiting_fd = waiting_fd2;
+    waiting_fd2 = -1;
+  }
+  else if (waiting_fd2==fd)waiting_fd2 = -1;
   if (fd==*max_fd) {
     while(*max_fd>=0 && !FD_ISSET(*max_fd,descriptors)) {
       (*max_fd)--;
