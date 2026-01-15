@@ -31,4 +31,4 @@ The game is played as follows:
 
 ### Resources/ References:
 
-list here(CHANGE THIS!!!!!)
+no external libraries
