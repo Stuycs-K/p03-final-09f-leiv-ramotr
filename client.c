@@ -20,9 +20,10 @@ int main(int argc, char *argv[] ) {
 void begin_play() {
   printf("Enter 1 to play locally. Enter 2 to play against a random opponent.\n");
   printf("Type \'help\' to show manual.\n");
-  char mode[10];
+  char mode[100];
   while(1) {
     char *in = fgets(mode,sizeof(mode),stdin);
+    mode[strlen(mode)-1] = 0;
     if (in==NULL)err();
     if(strcmp(mode,"help")==0){
       print_help();
