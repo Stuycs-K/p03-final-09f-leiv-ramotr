@@ -18,8 +18,8 @@ int main(int argc, char *argv[] ) {
 }
 
 void begin_play() {
-  printf("Type \'help\' to show manual.\n");
   printf("Enter 1 to play locally. Enter 2 to play against a random opponent.\n");
+  printf("Type \'help\' to show manual.\n");
   char mode[10];
   while(1) {
     char *in = fgets(mode,sizeof(mode),stdin);
