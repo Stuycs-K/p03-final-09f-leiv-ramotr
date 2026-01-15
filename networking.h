@@ -17,21 +17,27 @@
 #define NETWORKING_H
 #define PORT "19230"
 #define BUFFER_SIZE 1024
+// networking.c
+int server_setup();
+int server_tcp_handshake(int listen_socket);
+int client_tcp_handshake(char*server_address);
 void error(int i, char*message);
 void err();
-int server_setup();
-int client_tcp_handshake(char*server_address);
-int server_tcp_handshake(int listen_socket);
-int update_board(char *move, int player);
+// game.c
 void print_board();
-void onlineplay();
-void localplay();
-void reset_board();
-int check_board();
-void begin_play();
 void print_help();
-void reset();
+void reset_board();
+int update_board(char *move, int player);
+int check_board();
+// server.c
+void matchmaking(int fd);
+void close_client(int fd, fd_set *descriptors, int *max_fd);
+// client.c
+void begin_play();
+void onlineplay();
 void online_match();
 void online_game(int player);
+void localplay();
+void reset();
 extern char board[3][3];
 #endif
