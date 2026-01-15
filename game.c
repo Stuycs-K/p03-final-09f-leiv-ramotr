@@ -15,16 +15,18 @@ void print_board(){
 }
 
 void print_help() {
+  printf("\n");
+  printf("Game Manual\n");
   printf("1. Playing locally means you are playing on the same computer with your opponent.\n Playing against a random opponent means you will be connected to a specified server and given an opponent.\n");
   printf("2. To play the game, type the coordinates of an empty box.\n");
   printf("Top (T), Middle(M), Bottom (B), Left (L), Right(R)\n");
-  printf("TL | TM | TR \n———|————|——— \nML | MM | MR \n———|————|——— \nBL | BM | BR\n");
+  printf("TL | TM | TR \n———|————|——— \nML | MM | MR \n———|————|——— \nBL | BM | BR\n\n");
   printf("3. If already taken, you will be prompted to choose a different spot.\n");
   printf("4. Wait for your opponent's turn and repeat. Enter \'home\' at any time to return to the home menu.\n");
   printf("5. Have your pieces three in a row or diagonally to win.\n");
   printf("6. If you are playing online, when the game is over, you will have the option to play again with the same opponent, play with a new opponent, or return to the home menu.\n");
   printf("7. If your opponent leaves, you will be sent to the queue to wait for a new opponent. If the server disconnects, you will be sent to the home menu.\n");
-  printf("8. If you are playing locally, you can play again or return home by typing \'home\'. after the game end\n");
+  printf("8. If you are playing locally, you can play again or return home by typing \'home\' after the game ends. \n");
   printf("\n");
 }
 
