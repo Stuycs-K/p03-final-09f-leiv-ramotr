@@ -89,6 +89,7 @@ int main(int argc, char *argv[] ) {
           close_client(fd,&descriptors,&max_fd);
           if (opp!=-1) {
             opponent[opp] = -1;
+            last_played[opp] = -1;
             send(opp,"opponent left",13,0);
             matchmaking(opp);
           }
