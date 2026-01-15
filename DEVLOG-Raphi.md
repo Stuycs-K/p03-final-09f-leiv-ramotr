@@ -33,3 +33,4 @@ At home: used select to get input from what opponent does after game is over and
 
 ### 2026-01-14 - Testing End Logic
 Tested with Vanna. Found small and big bugs that will look into at home.
+At home: lots of debugging. Added select in places to account for edge cases of opponent leaving/server disconnecting. Added guards to stop bad IP addresses and ask for a new one. Added endgame logic to local play to play again.
