@@ -248,6 +248,10 @@ void localplay() {
       if (input==NULL)err();
       move[strlen(move)-1] = 0;
       if (strcmp(move,"help")==0)print_help();
+      else if (strncmp(in,"home",4)==0) {
+        begin_play();
+        return;
+      }
       else {
         int success = update_board(move,player);
         if (success)break;
