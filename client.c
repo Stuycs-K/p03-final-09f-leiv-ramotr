@@ -6,6 +6,7 @@ static void sighandler(int signo) {
   if (signo==SIGINT) {
     char message[20] = "home";
     send(server_socket,message,4,0);
+    close(server_socket);
     printf("\n");
     exit(0);
   }
@@ -209,6 +210,7 @@ void online_game(int player) {
 
 void localplay() {
   reset_board();
+  char *input;
   int player = 1;
   while(check_board()==0) {
     char move[100];
@@ -216,7 +218,7 @@ void localplay() {
     char piece = player==1 ? 'X' : 'O';
     while(1) {
       printf("%c's turn: ",piece);
-      char *input = fgets(move,sizeof(move),stdin);
+      input = fgets(move,sizeof(move),stdin);
       if (input==NULL)err();
       move[strlen(move)-1] = 0;
       if (strcmp(move,"help")==0)print_help();
@@ -238,6 +240,22 @@ void localplay() {
   }
   else if (result==3) {
     printf("Draw. What an intense match.\n");
+  }
+  char in[100];
+  printf("\nIf you would like to play again, hit enter. To return to the home menu, enter \'home\'.\n");
+  while(1) {
+    input = fgets(in,sizeof(in),stdin);
+    if (input==NULL)err();
+    in[strlen(in)-1] = 0;
+    if (strlen(in)==0) {
+      localplay();
+      return;
+    }
+    if (strncmp(in,"home",4)==0) {
+      begin_play();
+      return;
+    }
+    printf("Please press enter to play again or enter \'home\' to return home.\n");
   }
 }
 
