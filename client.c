@@ -95,8 +95,9 @@ void online_match() {
 void online_game(int player) {
   int bytes;
   char *input;
-  reset_board();
+  fd_set descriptors;
   int initialPlayer = player;
+  reset_board();
   while(check_board()==0) {
     char move[100];
     print_board();
@@ -118,20 +119,39 @@ void online_game(int player) {
     else {
       while(1) {
         printf("Your turn to move: \n");
-        input = fgets(move,sizeof(move),stdin);
-        if (input==NULL)err();
-        move[strlen(move)-1] = 0;
-        if (strcmp(move,"help")==0)print_help();
-        else if(strcmp(move,"home")==0) {
-          send(server_socket,move,4,0);
-          close(server_socket);
-          begin_play();
-          return;
+        FD_ZERO(&descriptors);
+        FD_SET(server_socket,&descriptors);
+        FD_SET(STDIN_FILENO,&descriptors);
+        int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
+        if (FD_ISSET(STDIN_FILENO,&descriptors)) {
+          input = fgets(move,sizeof(move),stdin);
+          if (input==NULL)err();
+          move[strlen(move)-1] = 0;
+          if (strcmp(move,"help")==0)print_help();
+          else if(strcmp(move,"home")==0) {
+            send(server_socket,move,4,0);
+            close(server_socket);
+            begin_play();
+            return;
+          }
+          else {
+            int success = update_board(move,initialPlayer);
+            if (success)break;
+            printf("invalid move. enter \'help\' for more info. ");
+          }
         }
-        else {
-          int success = update_board(move,initialPlayer);
-          if (success)break;
-          printf("invalid move. enter \'help\' for more info. ");
+        if (FD_ISSET(server_socket,&descriptors)) {
+          bytes = recv(server_socket,move,sizeof(move),0);
+          if (bytes<(int)sizeof(move))move[bytes] = 0;
+          if (bytes==0) {
+            reset();
+            return;
+          }
+          if (strncmp(move,"opponent left",13)==0) {
+            printf("Opponent left. Searching for new opponent.\n");
+            online_match();
+            return;
+          }
         }
       }
       send(server_socket,move,strlen(move)+1,0);
@@ -151,7 +171,6 @@ void online_game(int player) {
   }
   printf("\nIf you would like to play again, hit enter. If you want to find a new opponent, enter \'exit\'. To return to the home menu, enter \'home\'.\n");
   char in[100];
-  fd_set descriptors;
   int play = 0, playopp = 0;
   while(1) {
     FD_ZERO(&descriptors);
