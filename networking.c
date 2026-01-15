@@ -57,16 +57,24 @@ int client_tcp_handshake(char * server_address) {
   hints->ai_family = AF_INET;
   hints->ai_socktype = SOCK_STREAM;
   //getaddrinfo
-  error(getaddrinfo(server_address,PORT,hints,&results),"getting address info");
+  int status = getaddrinfo(server_address,PORT,hints,&results);
+  if (status!=0)return -1;
   int serverd;//store the socket descriptor here
   //create the socket
   serverd = socket(results->ai_family, results->ai_socktype, results->ai_protocol);
-  error(serverd,"creating socket");
+  if (serverd<0) {
+    freeaddrinfo(results);
+    return -1;
+  }
   //connect() to the server
-  error(connect(serverd, results->ai_addr, results->ai_addrlen),"connecting");
+  status = connect(serverd, results->ai_addr, results->ai_addrlen);
+  if (status!=0) {
+    close(serverd);
+    freeaddrinfo(results);
+    return -1;
+  }
   free(hints);
   freeaddrinfo(results);
-
   return serverd;
 }
 
