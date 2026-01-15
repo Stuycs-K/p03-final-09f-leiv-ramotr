@@ -5,7 +5,7 @@ static int server_socket;
 static void sighandler(int signo) {
   if (signo==SIGINT) {
     char message[20] = "home";
-    send(server_socket,message,sizeof(message),0);
+    send(server_socket,message,4,0);
     printf("\n");
     exit(0);
   }
@@ -44,6 +44,7 @@ void onlineplay() {
   printf("Enter the IP Address of the server (Press enter if server is local or enter \'home\' to go back to main menu):\n");
   char newIP[20];
   char *input = fgets(newIP,sizeof(newIP),stdin);
+  if (input==NULL)err();
   newIP[strlen(newIP)-1] = 0;
   if(strlen(newIP)!=0){
     IP=newIP;
@@ -59,21 +60,23 @@ void online_match() {
   int player, bytes;
   fd_set descriptors;
   char *input;
-  FD_ZERO(&descriptors);
-  FD_SET(server_socket,&descriptors);
-  FD_SET(STDIN_FILENO,&descriptors);
   while (1) {
+    FD_ZERO(&descriptors);
+    FD_SET(server_socket,&descriptors);
+    FD_SET(STDIN_FILENO,&descriptors);
     int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
     if (FD_ISSET(STDIN_FILENO,&descriptors)) {
       char buf[100];
       input = fgets(buf,sizeof(buf),stdin);
+      if (input==NULL)err();
       buf[strlen(buf)-1] = 0;
       if(strcmp(buf,"home")==0) {
-        send(server_socket,buf,sizeof(buf),0);
+        send(server_socket,buf,4,0);
         close(server_socket);
         begin_play();
         return;
       }
+      printf("Still not matched... Enter \'home\' to return to home page.\n");
     }
     if(FD_ISSET(server_socket, &descriptors)) {
       bytes = recv(server_socket,&player,sizeof(int),0);
@@ -99,6 +102,7 @@ void online_game(int player) {
     if (player==2) {
       printf("Waiting for opponent to move...\n");
       bytes = recv(server_socket,move,sizeof(move),0);
+      if (bytes<(int)sizeof(move))move[bytes] = 0;
       if (bytes==0) {
         reset();
         return;
@@ -118,7 +122,7 @@ void online_game(int player) {
         move[strlen(move)-1] = 0;
         if (strcmp(move,"help")==0)print_help();
         else if(strcmp(move,"home")==0) {
-          send(server_socket,move,sizeof(move),0);
+          send(server_socket,move,4,0);
           close(server_socket);
           begin_play();
           return;
@@ -129,7 +133,7 @@ void online_game(int player) {
           printf("invalid move. enter \'help\' for more info. ");
         }
       }
-      send(server_socket,move,sizeof(move),0);
+      send(server_socket,move,strlen(move)+1,0);
     }
     player = player%2+1;
   }
@@ -147,11 +151,11 @@ void online_game(int player) {
   printf("\nIf you would like to play again, hit enter. If you want to find a new opponent, enter \'exit\'. To return to the home menu, enter \'home\'.\n");
   char in[100];
   fd_set descriptors;
-  FD_ZERO(&descriptors);
-  FD_SET(server_socket,&descriptors);
-  FD_SET(STDIN_FILENO,&descriptors);
   int play = 0, playopp = 0;
   while(1) {
+    FD_ZERO(&descriptors);
+    FD_SET(server_socket,&descriptors);
+    FD_SET(STDIN_FILENO,&descriptors);
     int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
     if (FD_ISSET(STDIN_FILENO,&descriptors)) {
       input = fgets(in,sizeof(in),stdin);
@@ -165,12 +169,12 @@ void online_game(int player) {
         printf("Waiting to play again...\n");
       }
       else if (strncmp(in,"exit",4)==0) {
-        send(server_socket,in,sizeof(in),0);
+        send(server_socket,in,strlen(in)+1,0);
         online_match();
         return;
       }
       else if (strncmp(in,"home",4)==0) {
-        send(server_socket,in,sizeof(in),0);
+        send(server_socket,in,strlen(in)+1,0);
         close(server_socket);
         begin_play();
         return;
@@ -180,6 +184,7 @@ void online_game(int player) {
     }
     if (FD_ISSET(server_socket,&descriptors)) {
       bytes = recv(server_socket,in,sizeof(in),0);
+      if (bytes<(int)sizeof(in))in[bytes] = 0;
       if (bytes == 0) {
         reset();
         return;
@@ -200,8 +205,6 @@ void online_game(int player) {
   printf("Beginning new game.\n");
   online_game(initialPlayer%2+1);
   return;
-  //if they say new opponent then save the fd of this opponent in a list in the server file
-  //add a second waiting slot to server
 }
 
 void localplay() {
