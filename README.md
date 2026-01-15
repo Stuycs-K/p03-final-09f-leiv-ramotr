@@ -26,8 +26,10 @@ The game is played as follows:
 3. If already taken, you will be prompted to choose a different spot.
 4. Wait for your opponent's turn and repeat.
 5. Have your pieces three in a row, column, or diagonal to win.
-6. When the game is over, you will have the option to play again with the same client play with a new opponent, or return to the home menu.
-7. If you want to return to the home menu anytime during the game, you can just type 'home'.
+6. If you are playing online, when the game is over, you will have the option to play again with the same client play with a new opponent, or return to the home menu.
+7. If your opponent leaves, you will be sent to the queue to wait for a new opponent. If the server disconnects, you will be sent to the home menu.\n");
+8. If you are playing locally, you can play again or return home by typing \'home\'. after the game ends \n");
+9. If you want to return to the home menu anytime during the game, you can just type 'home'.
 
 ### Resources/ References:
 
