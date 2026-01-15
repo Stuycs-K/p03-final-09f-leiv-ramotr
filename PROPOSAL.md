@@ -14,30 +14,29 @@ We want to create a Tic Tac Toe Game where you have the option to play with peop
  - They'll see a tic tac toe board and they will type in the coordinates of their chosen tile.
  - Both their and their opponent's board will update and they'll wait for the player to respond.
  - The process will repeat and the game will indicate a win loss or draw.
- - Afterwards the game will restart and the score will be kept.  
+ - Afterwards the game will restart or they will find new opponents based on their input.  
  - They will have the option to play again with the same client or never again.
 
 # Technical Details:
 
  - Sockets to connect severs to random clients.
- - Stores game board locally and win-loss rate.
- - use select to listen for new sockets and get user input
- - Working with files to save local memory of that game in the two player option
- - ncurses if have time to make a chat
- - Finding a new opponent: saves PID of client already played with before and if matched again, it will leave the game and search for a different player and it will send the opponent a message that "you displayed horrible sportsmanship".
+ - allocating memory within the networking file.
+ - sighandler to deal with ctrl+c behavior
+ - use select to listen for new sockets, get user input, and receive info from the server.
+ - Finding a new opponent: saves fd of client already played with before and if matched again, will instead add you to the queue.
 
 # How you are breaking down the project and who is responsible for which parts.
 
-Whoever is free to work on the next part will work on it.
-Raphi’s main focus will be debugging and making the server and clients connect
-Vanna’s main focus will be documentation and designing the gameboard and creative ideas
+Whoever is free to work on the next part will work on it.  
+Raphi’s main focus will be debugging and making the server and clients connect.  
+Vanna’s main focus will be documentation and designing the game board and creative ideas.  
 
 # Intended pacing:
 
-Wednesday 1/7 - We will have the sockets and documentation layout done.
-Thursday 1/8 - Match pairing system
-Friday 1/9 - Game board design
-Weekend - Make turns
-Monday 1/12 - MVP Done
-Tues-Thurs - Additional Features
-Friday 1/16 - Final checks on Project
+Wednesday 1/7 - We will have the sockets and documentation layout done.  
+Thursday 1/8 - Match pairing system  
+Friday 1/9 - Game board design  
+Weekend - Make turns  
+Monday 1/12 - MVP Done  
+Tues-Thurs - Additional Features  
+Friday 1/16 - Final checks on Project  
