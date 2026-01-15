@@ -24,7 +24,7 @@ void begin_play() {
   while(1) {
     char *in = fgets(mode,sizeof(mode),stdin);
     if (in==NULL)err();
-    if(strncmp(mode,"help",4)==0){
+    if(strcmp(mode,"help")==0){
       print_help();
     }
     if (mode[0]=='1' || mode[0]=='2')break;
@@ -195,12 +195,12 @@ void online_game(int player) {
         if (playopp==1)break;
         printf("Waiting to play again...\n");
       }
-      else if (strncmp(in,"exit",4)==0) {
+      else if (strcmp(in,"exit")==0) {
         send(server_socket,in,strlen(in)+1,0);
         online_match();
         return;
       }
-      else if (strncmp(in,"home",4)==0) {
+      else if (strcmp(in,"home")==0) {
         send(server_socket,in,strlen(in)+1,0);
         close(server_socket);
         begin_play();
@@ -248,7 +248,7 @@ void localplay() {
       if (input==NULL)err();
       move[strlen(move)-1] = 0;
       if (strcmp(move,"help")==0)print_help();
-      else if (strncmp(in,"home",4)==0) {
+      else if (strcmp(move,"home")==0) {
         begin_play();
         return;
       }
@@ -281,7 +281,7 @@ void localplay() {
       localplay();
       return;
     }
-    if (strncmp(in,"home",4)==0) {
+    if (strcmp(in,"home")==0) {
       begin_play();
       return;
     }
