@@ -47,7 +47,7 @@ int update_board(char *move, int player){
   else if(player == 2){
     piece = 'O';
   }
-  if((strncmp(move, "TL", 2) == 0) && (board[0][0] == ' ')){
+  if((strcmp(move, "TL") == 0) && (board[0][0] == ' ')){
     board[0][0] = piece;
     int moveBR[3] = {0,3,6};
     for(int i = 0; i<3; i++){
@@ -55,7 +55,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "TM", 2) == 0) && (board[0][1] == ' ')){
+  else if((strcmp(move, "TM") == 0) && (board[0][1] == ' ')){
     board[0][1] = piece;
     int moveBR[2] = {0,4};
     for(int i = 0; i<2; i++){
@@ -63,7 +63,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "TR", 2) == 0) && (board[0][2] == ' ')){
+  else if((strcmp(move, "TR") == 0) && (board[0][2] == ' ')){
     board[0][2] = piece;
     int moveBR[3] = {0,5,7};
     for(int i = 0; i<3; i++){
@@ -71,7 +71,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "ML", 2) == 0) && (board[1][0] == ' ')){
+  else if((strcmp(move, "ML") == 0) && (board[1][0] == ' ')){
     board[1][0] = piece;
     int moveBR[2] = {1,3};
     for(int i = 0; i<2; i++){
@@ -79,7 +79,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "MM", 2) == 0) && (board[1][1] == ' ')){
+  else if((strcmp(move, "MM") == 0) && (board[1][1] == ' ')){
     board[1][1] = piece;
     int moveBR[4] = {1,4,6,7};
     for(int i = 0; i<4; i++){
@@ -87,7 +87,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "MR", 2) == 0) && (board[1][2] == ' ')){
+  else if((strcmp(move, "MR") == 0) && (board[1][2] == ' ')){
     board[1][2] = piece;
     int moveBR[2] = {1,5};
     for(int i = 0; i<2; i++){
@@ -95,7 +95,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "BL", 2) == 0) && (board[2][0] == ' ')){
+  else if((strcmp(move, "BL") == 0) && (board[2][0] == ' ')){
     board[2][0] = piece;
     int moveBR[3] = {2,3,7};
     for(int i = 0; i<3; i++){
@@ -103,7 +103,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "BM", 2) == 0) && (board[2][1] == ' ')){
+  else if((strcmp(move, "BM") == 0) && (board[2][1] == ' ')){
     board[2][1] = piece;
     int moveBR[2] = {2,4};
     for(int i = 0; i<2; i++){
@@ -111,7 +111,7 @@ int update_board(char *move, int player){
       if(player == 2) score[moveBR[i]] -= 1;
     }
   }
-  else if((strncmp(move, "BR", 2) == 0) && (board[2][2] == ' ')){
+  else if((strcmp(move, "BR") == 0) && (board[2][2] == ' ')){
     board[2][2] = piece;
     int moveBR[3] = {2,5,6};
     for(int i = 0; i<3; i++){
