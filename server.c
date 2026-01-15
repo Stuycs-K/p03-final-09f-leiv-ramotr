@@ -31,7 +31,7 @@ void matchmaking(int fd){
   waiting_fd2 = -1;
 }
 
-void close_client(int fd, fd_set *descriptors) {
+void close_client(int fd, fd_set *descriptors, int *max_fd) {
   FD_CLR(fd,descriptors);
   close(fd);
   opponent[fd] = -1;
@@ -39,6 +39,11 @@ void close_client(int fd, fd_set *descriptors) {
   // reset waiting_fd if it was waiting
   if (waiting_fd==fd)waiting_fd = -1;
   if (waiting_fd2==fd)waiting_fd2 = -1;
+  if (fd==*max_fd) {
+    while(*max_fd>=0 && !FD_ISSET(*max_fd,descriptors)) {
+      (*max_fd)--;
+    }
+  }
   printf("client disconnected\n");
 }
 
@@ -53,6 +58,7 @@ int main(int argc, char *argv[] ) {
   int max_fd = listen_socket;
   for (int i = 0; i<FD_SETSIZE; i++) {
     opponent[i] = -1;
+    last_played[i] = -1;
   }
   while(1) {
     current = descriptors;
@@ -77,7 +83,7 @@ int main(int argc, char *argv[] ) {
         if (bytes<=0 || strncmp(move,"home",4)==0) {
           // if client exited, add the opponent back to queue and close client
           // doesn't set last_played if opponent leaves game
-          close_client(fd,&descriptors);
+          close_client(fd,&descriptors,&max_fd);
           if (opp!=-1) {
             opponent[opp] = -1;
             send(opp,"opponent left",13,0);
