@@ -27,3 +27,7 @@ Discussed with Raphi next steps and then I worked on the script for the video.
 
 ### 2026-01-14 - Debug and Testing
 Tested code and tried to debug and find bugs on our computers with Raphi. Errors are in the script.md server. The problems we have are involved in endgame matchmaking.
+
+### 2026-01-15 - Tested, finished script, Filmed Video
+Raphi and I went through script in class, tested new features, and then at home, filmed the video.
+
