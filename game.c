@@ -3,6 +3,7 @@ char board[3][3];
 int score[8];
 
 void print_board(){
+  printf("\n");
   printf("     |     |     \n");
   printf("  %c  |  %c  |  %c  \n", board[0][0], board[0][1], board[0][2]);
   printf("_____|_____|_____\n");
