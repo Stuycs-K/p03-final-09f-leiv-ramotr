@@ -110,19 +110,43 @@ void online_game(int player) {
     char move[100];
     print_board();
     if (player==2) {
-      printf("Waiting for opponent to move...\n");
-      bytes = recv(server_socket,move,sizeof(move),0);
-      if (bytes<(int)sizeof(move))move[bytes] = 0;
-      if (bytes==0) {
-        reset();
-        return;
+      while (1) {
+        printf("Waiting for opponent to move...\n");
+        FD_ZERO(&descriptors);
+        FD_SET(server_socket,&descriptors);
+        FD_SET(STDIN_FILENO,&descriptors);
+        int i = select(server_socket+1,&descriptors,NULL,NULL,NULL);
+        if (FD_ISSET(server_socket, &descriptors)) {
+          bytes = recv(server_socket,move,sizeof(move),0);
+          if (bytes<(int)sizeof(move))move[bytes] = 0;
+          if (bytes==0) {
+            reset();
+            return;
+          }
+          if (strncmp(move,"opponent left",13)==0) {
+            printf("Opponent left. Searching for new opponent.\n");
+            online_match();
+            return;
+          }
+          update_board(move,initialPlayer%2+1);
+          break;
+        }
+        if (FD_ISSET(STDIN_FILENO,&descriptors)) {
+          input = fgets(move,sizeof(move),stdin);
+          if (input==NULL)err();
+          move[strlen(move)-1] = 0;
+          if (strcmp(move,"help")==0)print_help();
+          else if(strcmp(move,"home")==0) {
+            send(server_socket,move,4,0);
+            close(server_socket);
+            begin_play();
+            return;
+          }
+          else {
+            printf("It is your opponent's turn. You can enter \'home\' to return home or \'help\' to show manual.\n");
+          }
+        }
       }
-      if (strncmp(move,"opponent left",13)==0) {
-        printf("Opponent left. Searching for new opponent.\n");
-        online_match();
-        return;
-      }
-      update_board(move,initialPlayer%2+1);
     }
     else {
       while(1) {
